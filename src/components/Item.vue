@@ -1,14 +1,12 @@
 <template>
-    <div></div>
+    <div>
+        I am Item {{ $route.params.id }}
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'Baz',
-
-  data() {
-    return {};
-  }
+  name: 'Item',
 }
 </script>
 
