@@ -47,7 +47,14 @@ if (isProd) {
     clientManifest,
   });
 } else {
-
+  readyPromise = require('./build/setup-dev-server')(
+    app,
+    templatePath,
+    (bundle, options) => {
+      console.log('bundle callback..');
+      render = createRenderer(bundle, options);
+    },
+  );
 }
 
 const serve = (path, cache) => express.static(resolve(path), {
