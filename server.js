@@ -52,8 +52,8 @@ if (isProd) {
     templatePath,
     (bundle, options) => {
       console.log('bundle callback..');
-      render = createRenderer(bundle, options);
-    },
+      renderer = createRenderer(bundle, options);
+    }
   );
 }
 
