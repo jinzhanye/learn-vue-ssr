@@ -1,4 +1,5 @@
-import Vue from 'vue'
+import Vue from 'vue';
+import 'es6-promise/auto';
 import { createApp } from './app';
 
 // a global mixin that calls `asyncData` when a route component's params change
@@ -20,7 +21,7 @@ Vue.mixin({
 const { app, router, store } = createApp();
 
 if (window.__INITIAL_STATE__) {
-  store.replaceState(window.__INITIAL_STATE__)
+  store.replaceState(window.__INITIAL_STATE__);
 }
 
 router.onReady(() => {
@@ -38,8 +39,8 @@ router.onReady(() => {
     const activated = matched.filter((c, i) => {
       return diffed || (diffed = (prevMatched[i] !== c))
     });
-
-    if (!activated.length) {
+    const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _);
+    if (!asyncDataHooks.length) {
       return next();
     }
     // TODO 这里如果有加载指示器 (loading indicator)，就触发
@@ -50,7 +51,7 @@ router.onReady(() => {
     })).then(() => {
       // TODO 停止加载指示器(loading indicator)
       next();
-    }).catch(next)
+    }).catch(next);
   });
 
   app.$mount('#app');

@@ -6,14 +6,10 @@
 
 <script>
 export default {
-  name: 'ItemList.vue',
+  name: 'ItemList',
 
   data() {
     return {};
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -53,7 +53,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
   clientConfig.output.filename = '[name].js';
   clientConfig.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
   );
 
   // dev middleware
@@ -65,7 +65,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
   app.use(devMiddleware);
   // 每次编译完成后热更新客户端
   clientCompiler.plugin('done', stats => {
-    stats.toJSON();
+    stats = stats.toJson();
     stats.errors.forEach(err => console.error(err));
     stats.warnings.forEach(err => console.warn(err));
     if (stats.errors.length)
@@ -89,7 +89,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
     if (err) {
       throw err;
     }
-    stats = stats.toJSON();
+    stats = stats.toJson();
 
     if (stats.errors.length) {
       return;
