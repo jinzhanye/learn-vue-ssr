@@ -33,7 +33,7 @@ router.onReady(() => {
     const prevMatched = router.getMatchedComponents(from);
 
     // 我们只关心非预渲染的组件
-    // 所以我们对比它们，找出两个匹配列表的差异组件
+    // 所以我们对比它们，找出两个匹配列表的差异组件，避免相同组件二次请求数据
     let diffed = false;
     const activated = matched.filter((c, i) => {
       return diffed || (diffed = (prevMatched[i] !== c))
