@@ -1,16 +1,27 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
-const ItemList = () => import('../views/ItemList.vue');
+import Config from '../config/category';
 
 Vue.use(Router);
+
+const createListView = id => () => import('../views/CreateListView').then(m => m.default(id));
+
+const routes = Config.map(config => ({
+  path: `/${config.title}`,
+  component: createListView(config.title),
+}));
+
+routes.push({
+  path: '/',
+  redirect: routes[0].path,
+});
 
 export function createRouter() {
   return new Router({
     mode: 'history',
-    routes: [
-      { path: '/', component: ItemList },
-    ]
+    fallback: false,
+    scrollBehavior: () => ({y: 0}),
+    routes,
   });
 }
 
