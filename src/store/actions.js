@@ -1,9 +1,12 @@
-import { fetchIdsByType } from '../api';
+import {
+  fetchIdsByType
+} from '../api';
 
 export default {
   // ensure data for rendering given list type
   FETCH_LIST_DATA: ({ commit, dispatch, state }, { type, index, action }) => {
     commit('SET_ACTIVE_TYPE', { type });
+    // commit(action === 'next' ? 'ADD_TYPE_RANK_INDEX' : 'DEL_TYPE_RANK_INDEX', {type, index});
     return fetchIdsByType(type, index)
       .then(data => {
         switch (action) {
@@ -22,4 +25,4 @@ export default {
         commit('SET_LIST', { type, data });
       });
   }
-}
+};

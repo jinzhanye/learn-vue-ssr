@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import actions from './actions'
-import mutations from './mutations'
+import actions from './actions';
+import mutations from './mutations';
 import Category from '../config/category';
 
 Vue.use(Vuex);
@@ -17,11 +17,10 @@ export function createStore() {
   return new Vuex.Store({
     state: {
       activeType: null,
-      lists,
-      rankIndex,
+      lists: lists,
+      rankIndex: rankIndex
     },
     actions,
-    mutations
-  });
+    mutations,
+  })
 }
-

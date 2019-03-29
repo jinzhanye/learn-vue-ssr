@@ -14,13 +14,16 @@ import Item from '../components/Item.vue';
 export default {
   name: 'ItemList',
 
+  props: {
+    type: String
+  },
+
   computed: {
     prevDisabled() {
-      return false;
-      // return this.rankIndex.length <= 1;
+      return this.rankIndex.length <= 1;
     },
     rankIndex() {
-      // return this.$store.state.rankIndex[this.type];
+      return this.$store.state.rankIndex[this.type];
     }
   },
 
@@ -29,8 +32,10 @@ export default {
   },
 
   data() {
+    const currentTypeItems = this.$store.state.lists[this.type];
     return {
       displayedPage: Number(this.$route.params.page) || 1,
+      displayedItems: currentTypeItems.entrylist,
     };
   },
 
