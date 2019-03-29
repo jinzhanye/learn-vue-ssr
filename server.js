@@ -113,10 +113,6 @@ function render(req, res) {
   });
 }
 
-app.get('*', isProd ? render : (req, res) => {
-  readyPromise.then(() => render(req, res));
-});
-
 app.get('/v1/get_entry_by_rank', (req, res) => {
   console.log(req.url);
   axios({
@@ -130,6 +126,10 @@ app.get('/v1/get_entry_by_rank', (req, res) => {
     console.error(err);
     res.status(500).send('500 | Internal Server Error')
   });
+});
+
+app.get('*', isProd ? render : (req, res) => {
+  readyPromise.then(() => render(req, res));
 });
 
 const port = process.env.PORT || 7888;

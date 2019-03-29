@@ -1,6 +1,12 @@
 <template>
     <div class="news-view">
-        <div class="new-list"></div>
+        <div class="news-list">
+            <ul>
+                <Item v-for="(item,idx) in displayedItems"
+                      :key="idx"
+                      :item="item"/>
+            </ul>
+        </div>
         <div class="news-list-nav">
             <a @click="prev" :class="{'disabled': prevDisabled}">&lt; prev</a>
             <a @click="next">next &gt;</a>
@@ -18,6 +24,14 @@ export default {
     type: String
   },
 
+  data() {
+    const currentTypeItems = this.$store.state.lists[this.type];
+    return {
+      displayedPage: Number(this.$route.params.page) || 1,
+      displayedItems: currentTypeItems.entrylist,
+    };
+  },
+
   computed: {
     prevDisabled() {
       return this.rankIndex.length <= 1;
@@ -31,17 +45,32 @@ export default {
     Item,
   },
 
-  data() {
-    const currentTypeItems = this.$store.state.lists[this.type];
-    return {
-      displayedPage: Number(this.$route.params.page) || 1,
-      displayedItems: currentTypeItems.entrylist,
-    };
-  },
-
   methods: {
-    prev() {},
-    next() {},
+    next() {
+      const displayedItemsLength = this.displayedItems.length;
+      const lastDisplayItem = this.displayedItems[displayedItemsLength - 1];
+      const before = lastDisplayItem && lastDisplayItem.rankIndex || undefined;
+      this.$store.dispatch('FETCH_LIST_DATA', {
+        type: this.type,
+        index: before,
+        action: 'next'
+      }).then(() => {
+        const currentTypeItems = this.$store.state.lists[this.type];
+        this.displayedItems = currentTypeItems.entrylist;
+      });
+    },
+    prev() {
+      const rankIndexList = this.rankIndex;
+      const before = rankIndexList[rankIndexList.length - 2] || undefined;
+      this.$store.dispatch('FETCH_LIST_DATA', {
+        type: this.type,
+        index: before,
+        action: 'prev'
+      }).then(() => {
+        const currentTypeItems = this.$store.state.lists[this.type];
+        this.displayedItems = currentTypeItems.entrylist;
+      });
+    }
   }
 }
 </script>
