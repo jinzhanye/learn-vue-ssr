@@ -10,7 +10,7 @@ const serverConfig = require('./webpack.server.config');
 const readFile = (fs, file) => {
   try {
     // clientConfig.output.path 实际上是指向 webpack.base.config 的 output.path
-    return fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
+    return fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8');
   } catch (e) {
     //
   }
@@ -70,6 +70,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
     stats.warnings.forEach(err => console.warn(err));
     if (stats.errors.length)
       return;
+    // readFile 返回的是字条串，需要 JSON.parse 编译
     clientManifest = JSON.parse(readFile(
       devMiddleware.fileSystem,
       'vue-ssr-client-manifest.json',
@@ -84,13 +85,15 @@ module.exports = function setupDevServer(app, templatePath, cb) {
    * ****/
   const serverCompiler = webpack(serverConfig);
   const mfs = new MFS();
+  // 指定 serverCompiler 输出到内存
   serverCompiler.outputFileSystem = mfs;
   serverCompiler.watch({}, (err, stats) => {
+    // 打包错误
     if (err) {
       throw err;
     }
     stats = stats.toJson();
-
+    // 非打包错误在这里捕获
     if (stats.errors.length) {
       return;
     }
